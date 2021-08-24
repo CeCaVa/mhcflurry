@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/openvax/mhcflurry.svg?branch=master)](https://travis-ci.org/openvax/mhcflurry)
 
+**N.B.** The readme has been updated to reflect the changes in the Dockerfile for CeCaVa.
+
 # mhcflurry
 [MHC I](https://en.wikipedia.org/wiki/MHC_class_I) ligand
 prediction package with competitive accuracy and a fast and 
@@ -72,24 +74,28 @@ See the [documentation](http://openvax.github.io/mhcflurry/) for more details.
 
 
 ## Docker
-You can also try the latest (GitHub master) version of MHCflurry using the Docker
-image hosted on [Dockerhub](https://hub.docker.com/r/openvax/mhcflurry) by
-running:
+To build the Docker image yourself (with the tag `tf-conda`), from a checkout run:
 
 ```
-$ docker run -p 9999:9999 --rm openvax/mhcflurry:latest
-``` 
+$ docker build -t mhcflurry:tf-conda .
+```
 
-This will start a [jupyter](https://jupyter.org/) notebook server in an
-environment that has MHCflurry installed. Go to `http://localhost:9999` in a
-browser to use it.
+It is only necessary to build the image once on each server.
 
-To build the Docker image yourself, from a checkout run:
+You can then run a container for a jupyter server as follows:
+```
+$ docker run -p 9999:9999 --rm mhcflurry:tf-conda
+```
+
+To run command line programs, while mounting typical directories in the cecava infrastructure, commands similar to the following can be used:
 
 ```
-$ docker build -t mhcflurry:latest .
-$ docker run -p 9999:9999 --rm mhcflurry:latest
+docker run --rm \
+        --mount type=bind,src=/cecava-share,target=/cecava-share \
+        --mount type=bind,src=/data,target=/data \
+        mhcflurry:tf-conda mhcflurry-predict-scan --sequences MFVFLVLLPLVSSQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHS --alleles HLA-A*02:01 --out /cecava-share/001_CompanyData/031_Bioinformatics/predictions.csv        
 ```
+
 ## Predicted sequence motifs
 Sequence logos for the binding motifs learned by MHCflurry BA are available [here](https://openvax.github.io/mhcflurry-motifs/).
 

@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:latest
+FROM continuumio/miniconda3:4.8.3
 
 LABEL maintainer="Tim O'Donnell timodonnell@gmail.com"
 
@@ -7,9 +7,12 @@ WORKDIR /root
 # Install / upgrade packages
 RUN pip install --upgrade pip && pip install jupyter seaborn
 
+RUN conda install -c anaconda tensorflow>=2.2.0
+
 # Install dependencies (doing this first to have them cached).
 COPY requirements.txt /tmp/mhcflurry-requirements.txt
 RUN pip install -r /tmp/mhcflurry-requirements.txt
+#RUN conda install --file /tmp/mhcflurry-requirements.txt
 
 # We pre-download the downloads here to avoid having to redownload them every
 # time the source code changes (i.e. we do this before the COPY . so these

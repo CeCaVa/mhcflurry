@@ -96,6 +96,18 @@ docker run --rm \
         mhcflurry:tf-conda mhcflurry-predict-scan --sequences MFVFLVLLPLVSSQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHS --alleles HLA-A*02:01 --out /cecava-share/001_CompanyData/031_Bioinformatics/predictions.csv        
 ```
 
+Calling previous versions of MHCflurry (described in the 2018 paper). Use models trained on affinity measurements, one allele per model (i.e. allele-specific). Mass spec datasets were incorporated in the model selection step.
+
+```
+docker run --rm \
+        --mount type=bind,src=/cecava-share,target=/cecava-share \
+        --mount type=bind,src=/data,target=/data \
+        mhcflurry:tf-conda mhcflurry-predict --alleles HLA-A2402 --peptides ANLPDLYKV GNLVTMEW SACKQLHRAGL \
+        --models /root/.local/share/mhcflurry/4/2.0.0/models_class1/models \
+        --out /cecava-share/001_CompanyData/031_Bioinformatics/predictions.csv        
+```
+
+
 ## Predicted sequence motifs
 Sequence logos for the binding motifs learned by MHCflurry BA are available [here](https://openvax.github.io/mhcflurry-motifs/).
 
